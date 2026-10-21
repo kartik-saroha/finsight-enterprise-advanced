@@ -1,0 +1,20 @@
+name: FinSight API tests
+on:
+  push:
+  pull_request:
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+        working-directory: backend
+      - run: pytest -q
+        working-directory: backend
+        env:
+          DATABASE_URL: sqlite:///./finsight_ci.db
+          JWT_SECRET_KEY: ci-test-secret-key-with-enough-entropy-123456
+          ALLOW_DEV_SECRET: '1'
